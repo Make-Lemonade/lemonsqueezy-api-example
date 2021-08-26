@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createRouter, createWebHashHistory }  from 'vue-router';
 import { get } from 'idb-keyval';
 import App from './App.vue';
+import store from './store';
 import './style.css';
 
 import Dashboard from './Pages/Dashboard.vue';
@@ -27,10 +28,11 @@ router.beforeEach(async (to, from) => {
     if (to.path !== '/login' && !token) {
         return '/login'
     }
-})
+});
 
 const app = createApp(App);
 app.use(router);
+app.use(store);
 app.component('Header', Header);
 app.mixin({
     methods: {

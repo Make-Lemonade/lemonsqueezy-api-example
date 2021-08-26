@@ -10,14 +10,12 @@
 </template>
 
 <script>
-import { get, set } from 'idb-keyval';
-import api from '../api';
 import Orders from '../Components/Orders.vue';
 
 export default {
-    data() {
-        return {
-            store: {}
+    computed: {
+        store() {
+            return this.$store.state.store;
         }
     },
 
@@ -26,40 +24,8 @@ export default {
     },
 
     created() {
-        this.loadDefaultStore();
+        //this.loadDefaultStore();
+        this.$store.dispatch('loadDefaultStore');
     },
-
-    methods: {
-        async loadDefaultStore() {
-            const storeId = await get('currentStore');
-            if (storeId) {
-                this.getStore(storeId);
-            } else {
-                this.getFirstStore();
-            }
-        },
-        getStore(storeId) {
-            api.get(`v1/stores/${storeId}`)
-                .then(response => {
-                    this.store = response.data;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        },
-        getFirstStore() {
-            api.get('v1/stores')
-                .then(response => {
-                    if (response.data.data.length) {
-                        const store = response.data.data[0];
-                        set('currentStore', store.id);
-                        this.getStore(store.id);
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-    }
 }
 </script>

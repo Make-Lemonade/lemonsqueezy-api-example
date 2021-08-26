@@ -3,21 +3,25 @@
         <Header :loading="!order.data" :show-done="true">
             <span v-if="order.data">
                 Order #{{ order.data.attributes.order_number }}
-                -
-                {{ formatCurrency(order.data.attributes.total, order.data.attributes.currency) }}
             </span>
         </Header>
+        <Order :order="order.data" :items="order.included" v-if="order.data" />
     </div>
 </template>
 
 <script>
 import api from '../api';
+import Order from '../Components/Order.vue';
 
 export default {
     data() {
         return {
             order: {}
         }
+    },
+
+    components: {
+        Order
     },
 
     created() {
